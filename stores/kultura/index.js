@@ -1,5 +1,5 @@
 const https = require('https');
-const getKulturaStore = require('./data');
+const getKulturaStoreQuery = require('./data');
 
 const searchQuery = 'dj';
 
