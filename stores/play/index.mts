@@ -1,6 +1,6 @@
 import getJson from '../../helpers/getJson.mts';
+import { searchQuery } from '../../data/data.mts';
 
-const searchQuery: string = 'black sabbath';
 const MAX_PRODUCTS_ON_PAGE = 10;
 const EXCLUDED_PRODUCTS = 'Значок';
 
@@ -48,7 +48,7 @@ const playRecords = async () => {
         return !item.title.includes(EXCLUDED_PRODUCTS);
     });
 
-    console.log(filteredItems);
+    return filteredItems;
 };
 
-playRecords().catch(console.error);
+export default playRecords;
