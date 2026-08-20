@@ -42,11 +42,3 @@ export interface IKulturaProduct {
     editions?: IRecordEdition[];
     characteristics?: ICharacteristic[];
 }
-
-export interface IDisplayedProduct {
-    title: string;
-    price: string;
-    quantity: string;
-    link: string;
-    image?: string;
-}

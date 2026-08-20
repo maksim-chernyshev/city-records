@@ -1,5 +1,8 @@
 import getJson from '../../helpers/getJson.mts';
 import { searchQuery } from '../../data/data.mts';
+import type { IDisplayedProduct } from '../../interfaces/types.mts';
+
+const STORE_NAME = 'Play';
 
 const MAX_PRODUCTS_ON_PAGE = 10;
 const EXCLUDED_PRODUCTS = 'Значок';
@@ -31,12 +34,13 @@ const playRecords = async () => {
         ...otherPages.flatMap((page) => page.pages),
     ];
 
-    const items = products.map((product) => {
+    const items = products.map((product): IDisplayedProduct => {
         const roundedPrice =
             product.product.price &&
             Math.floor(Number(product.product.price)).toString();
 
         return {
+            store: STORE_NAME,
             title: product.product.title || '',
             price: roundedPrice || '',
             link: product.pageurl || '',

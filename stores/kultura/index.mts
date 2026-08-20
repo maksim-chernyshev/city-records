@@ -1,6 +1,9 @@
-import type { IKulturaProduct, IDisplayedProduct } from './types.mts';
+import type { IKulturaProduct } from './types.mts';
 import getJson from '../../helpers/getJson.mts';
 import { searchQuery } from '../../data/data.mts';
+import type { IDisplayedProduct } from '../../interfaces/types.mts';
+
+const STORE_NAME = 'Kultura';
 
 const getKulturaStoreQuery = (text: string) => {
     const encodedText = encodeURI(text);
@@ -17,6 +20,7 @@ const kulturaRecords = async () => {
             product.price && Math.floor(Number(product.price)).toString();
 
         return {
+            store: STORE_NAME,
             title: product.title || '',
             price: roundedPrice || '',
             quantity: product.quantity || '',
