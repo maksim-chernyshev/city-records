@@ -1,3 +1,3 @@
-const searchQuery: string = 'dj shadow';
+const searchQuery: string = 'black sabbath';
 
 export { searchQuery };
