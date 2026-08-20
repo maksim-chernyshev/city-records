@@ -1,9 +1,8 @@
 import https from 'https';
 import getKulturaStoreQuery from './data.mts';
 import type { IKulturaProduct, IDisplayedProduct } from './types.mts';
-import { log } from 'console';
 
-const searchQuery: string = 'dj';
+const searchQuery: string = 'black sabbath';
 
 const kulturaRecords = https.get(getKulturaStoreQuery(searchQuery), (res) => {
     let body: string = '';
@@ -16,9 +15,12 @@ const kulturaRecords = https.get(getKulturaStoreQuery(searchQuery), (res) => {
         const products: IKulturaProduct[] = JSON.parse(body).products;
 
         const items = products.map((product): IDisplayedProduct => {
+            const roundedPrice =
+                product.price && Math.floor(Number(product.price)).toString();
+
             return {
                 title: product.title || '',
-                price: product.price || '',
+                price: roundedPrice || '',
                 quantity: product.quantity || '',
                 link: product.url || '',
                 image: JSON.parse(product.gallery)[0].img || '',
