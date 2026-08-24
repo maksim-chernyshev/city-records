@@ -1,5 +1,4 @@
 import getJson from '../../helpers/getJson.mts';
-import { searchQuery } from '../../data/data.mts';
 import type { IDisplayedProduct } from '../../interfaces/types.mts';
 
 const STORE_NAME = 'Ritm';
@@ -12,8 +11,8 @@ const getRitmStoreQuery = (text: string) => {
     return `https://ritm.store/ajax/search.php?value=${encodedText}`;
 };
 
-const ritmRecords = async () => {
-    const data = await getJson(getRitmStoreQuery(searchQuery));
+const ritmRecords = async (text: string) => {
+    const data = await getJson(getRitmStoreQuery(text));
 
     const products = data.PRODUCTS;
 

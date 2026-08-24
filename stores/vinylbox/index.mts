@@ -1,5 +1,4 @@
 import https from 'https';
-import { searchQuery } from '../../data/data.mts';
 import type { IDisplayedProduct } from '../../interfaces/types.mts';
 import * as cheerio from 'cheerio';
 
@@ -13,10 +12,10 @@ const getVinylBoxStoreQuery = (text: string) => {
     return `https://vinylbox.ru/new-products/search/result?setsearchdata=1&category_id=0&add_desc_in_search=1&search=${encodedText}`;
 };
 
-const vinylBoxRecords = () =>
+const vinylBoxRecords = (text: string) =>
     new Promise<IDisplayedProduct[]>((resolve, reject) => {
         https
-            .get(getVinylBoxStoreQuery(searchQuery), (res) => {
+            .get(getVinylBoxStoreQuery(text), (res) => {
                 let body = '';
 
                 res.on('data', (chunk) => {
