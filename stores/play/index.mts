@@ -5,7 +5,7 @@ import { isTitleMatch } from '../../helpers/isTitleMatch.mts';
 const STORE_NAME = 'Play';
 
 const MAX_PRODUCTS_ON_PAGE = 10;
-const EXCLUDED_PRODUCTS = 'Значок';
+const EXCLUDED_PRODUCTS = { PIN: 'значок', BOOK: 'книга' };
 
 const getPlayStoreQuery = (text: string, page: number = 1) => {
     const encodedText = encodeURI(text);
@@ -51,7 +51,12 @@ const playRecords = async (text: string) => {
     });
 
     const filteredItems = items.filter((item) => {
-        return !item?.title.includes(EXCLUDED_PRODUCTS);
+        const lowerCasedTitle = item?.title.toLowerCase();
+
+        return (
+            !lowerCasedTitle?.includes(EXCLUDED_PRODUCTS.PIN) &&
+            !lowerCasedTitle?.includes(EXCLUDED_PRODUCTS.BOOK)
+        );
     });
 
     return filteredItems;
