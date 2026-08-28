@@ -1,5 +1,6 @@
 import getJson from '../../helpers/getJson.mts';
 import type { IDisplayedProduct } from '../../interfaces/types.mts';
+import { isTitleMatch } from '../../helpers/isTitleMatch.mts';
 
 const STORE_NAME = 'Ritm';
 
@@ -16,10 +17,14 @@ const ritmRecords = async (text: string) => {
 
     const products = data.PRODUCTS;
 
-    const items = products.map((product): IDisplayedProduct => {
+    const items = products.map((product): IDisplayedProduct | null => {
         const price = product.FORMATED_PRICE.replace(/&nbsp;/g, '')
             .replace(/&#8381;/g, '')
             .replace(/\D/g, '');
+
+        if (!isTitleMatch(text, product.NAME)) {
+            return null;
+        }
 
         return {
             store: STORE_NAME,

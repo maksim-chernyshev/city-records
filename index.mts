@@ -19,15 +19,12 @@ async function init() {
     );
 
     cityRecordsBot.on('message', async (ctx) => {
-        const result: IDisplayedProduct[] | undefined = await getRecords(
+        const result: IDisplayedProduct[] | string = await getRecords(
             ctx.update.message?.text || '',
         );
 
-        if (!result || !result?.length) {
-            return ctx.reply(
-                `К сожалению ничего не найдено :(`,
-            );
-
+        if (typeof result === 'string' || !result?.length) {
+            return ctx.reply(`К сожалению ничего не найдено :(`);
         }
 
         result.map((item) => {

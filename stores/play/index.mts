@@ -1,5 +1,6 @@
 import getJson from '../../helpers/getJson.mts';
 import type { IDisplayedProduct } from '../../interfaces/types.mts';
+import { isTitleMatch } from '../../helpers/isTitleMatch.mts';
 
 const STORE_NAME = 'Play';
 
@@ -31,10 +32,14 @@ const playRecords = async (text: string) => {
         ...otherPages.flatMap((page) => page.pages),
     ];
 
-    const items = products.map((product): IDisplayedProduct => {
+    const items = products.map((product): IDisplayedProduct | null => {
         const roundedPrice =
             product.product.price &&
             Math.floor(Number(product.product.price)).toString();
+
+        if (!isTitleMatch(text, product.title)) {
+            return null;
+        }
 
         return {
             store: STORE_NAME,
@@ -46,7 +51,7 @@ const playRecords = async (text: string) => {
     });
 
     const filteredItems = items.filter((item) => {
-        return !item.title.includes(EXCLUDED_PRODUCTS);
+        return !item?.title.includes(EXCLUDED_PRODUCTS);
     });
 
     return filteredItems;

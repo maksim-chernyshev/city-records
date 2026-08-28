@@ -1,6 +1,7 @@
 import https from 'https';
 import type { IDisplayedProduct } from '../../interfaces/types.mts';
 import * as cheerio from 'cheerio';
+import { isTitleMatch } from '../../helpers/isTitleMatch.mts';
 
 const STORE_NAME = 'Vinyl Box';
 
@@ -47,7 +48,7 @@ const vinylBoxRecords = (text: string) =>
                     });
 
                     const items = data.products.map(
-                        (product): IDisplayedProduct => {
+                        (product): IDisplayedProduct | null => {
                             const trimmedTitle = product.title?.trim();
                             const trimmedDesc = product.description?.trim();
                             const trimmedPrice = product.price
@@ -55,6 +56,10 @@ const vinylBoxRecords = (text: string) =>
                                 .replace(/\D/g, '');
                             const trimmedLink = `${HOST}${product.link?.trim()}`;
                             const trimmedImg = product.image?.trim();
+
+                            if (!isTitleMatch(text, trimmedTitle)) {
+                                return null;
+                            }
 
                             return {
                                 store: STORE_NAME,

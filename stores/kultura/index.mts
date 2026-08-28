@@ -1,6 +1,7 @@
 import type { IKulturaProduct } from './types.mts';
 import getJson from '../../helpers/getJson.mts';
 import type { IDisplayedProduct } from '../../interfaces/types.mts';
+import { isTitleMatch } from '../../helpers/isTitleMatch.mts';
 
 const STORE_NAME = 'Kultura';
 
@@ -14,9 +15,13 @@ const kulturaRecords = async (text: string) => {
     const data = await getJson(getKulturaStoreQuery(text));
     const products: IKulturaProduct[] = data.products;
 
-    const items = products.map((product): IDisplayedProduct => {
+    const items = products.map((product): IDisplayedProduct | null => {
         const roundedPrice =
             product.price && Math.floor(Number(product.price)).toString();
+
+        if (!isTitleMatch(text, product.title)) {
+            return null;
+        }
 
         return {
             store: STORE_NAME,
