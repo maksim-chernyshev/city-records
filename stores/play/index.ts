@@ -1,10 +1,14 @@
-import getJson from '../../helpers/getJson.mts';
-import {type IDisplayedProduct, type IRecordStore, RecordStores} from '../../interfaces/types.mts';
+import getJson from "../../helpers/getJson.ts";
+import {
+    type IDisplayedProduct,
+    type IRecordStore,
+    RecordStores,
+} from "../../interfaces/types.ts";
 
 const STORE_NAME = RecordStores.Play;
 
 const MAX_PRODUCTS_ON_PAGE = 10;
-const EXCLUDED_PRODUCTS = 'Значок';
+const EXCLUDED_PRODUCTS = "Значок";
 
 const getPlayStoreQuery = (text: string, page: number = 1) => {
     const encodedText = encodeURI(text);
@@ -37,10 +41,10 @@ const playRecords = async (text: string): Promise<IRecordStore> => {
             Math.floor(Number(product.product.price)).toString();
 
         return {
-            title: product.product.title || '',
-            price: roundedPrice || '',
-            link: product.pageurl || '',
-            image: product.product.img || '',
+            title: product.product.title || "",
+            price: roundedPrice || "",
+            link: product.pageurl || "",
+            image: product.product.img || "",
         };
     });
 
@@ -51,7 +55,7 @@ const playRecords = async (text: string): Promise<IRecordStore> => {
     return {
         store: STORE_NAME,
         products: filteredItems,
-    }
+    };
 };
 
 export default playRecords;

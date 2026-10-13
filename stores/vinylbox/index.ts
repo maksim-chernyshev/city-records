@@ -1,45 +1,49 @@
-import https from 'https';
-import {type IDisplayedProduct, type IRecordStore, RecordStores} from '../../interfaces/types.mts';
-import * as cheerio from 'cheerio';
+import https from "https";
+import {
+    type IDisplayedProduct,
+    type IRecordStore,
+    RecordStores,
+} from "../../interfaces/types.ts";
+import * as cheerio from "cheerio";
 
 const STORE_NAME = RecordStores.Vinylbox;
 
-const HOST = 'https://vinylbox.ru';
+const HOST = "https://vinylbox.ru";
 
 const getVinylBoxStoreQuery = (text: string) => {
-    const encodedText = text.replaceAll(' ', '+');
+    const encodedText = text.replaceAll(" ", "+");
 
     return `https://vinylbox.ru/new-products/search/result?setsearchdata=1&category_id=0&add_desc_in_search=1&search=${encodedText}`;
 };
 
-const vinylBoxRecords = (text: string):Promise<IRecordStore> =>
+const vinylBoxRecords = (text: string): Promise<IRecordStore> =>
     new Promise((resolve, reject) => {
         https
             .get(getVinylBoxStoreQuery(text), (res) => {
-                let body = '';
+                let body = "";
 
-                res.on('data', (chunk) => {
+                res.on("data", (chunk) => {
                     body += chunk;
                 });
 
-                res.on('end', () => {
+                res.on("end", () => {
                     const $ = cheerio.load(body);
 
                     const data = $.extract({
                         products: [
                             {
-                                selector: '.product',
+                                selector: ".product",
                                 value: {
-                                    title: '.name',
-                                    description: '.description',
-                                    price: '.jshop_price',
+                                    title: ".name",
+                                    description: ".description",
+                                    price: ".jshop_price",
                                     link: {
-                                        selector: 'a',
-                                        value: 'href',
+                                        selector: "a",
+                                        value: "href",
                                     },
                                     image: {
-                                        selector: 'img',
-                                        value: 'src',
+                                        selector: "img",
+                                        value: "src",
                                     },
                                 },
                             },
@@ -52,15 +56,15 @@ const vinylBoxRecords = (text: string):Promise<IRecordStore> =>
                             const trimmedDesc = product.description?.trim();
                             const trimmedPrice = product.price
                                 ?.trim()
-                                .replace(/\D/g, '');
+                                .replace(/\D/g, "");
                             const trimmedLink = `${HOST}${product.link?.trim()}`;
                             const trimmedImg = product.image?.trim();
 
                             return {
-                                title: `${trimmedTitle} - ${trimmedDesc}` || '',
-                                price: trimmedPrice || '',
-                                link: trimmedLink || '',
-                                image: trimmedImg || '',
+                                title: `${trimmedTitle} - ${trimmedDesc}` || "",
+                                price: trimmedPrice || "",
+                                link: trimmedLink || "",
+                                image: trimmedImg || "",
                             };
                         },
                     );
@@ -71,7 +75,7 @@ const vinylBoxRecords = (text: string):Promise<IRecordStore> =>
                     });
                 });
             })
-            .on('error', reject);
+            .on("error", reject);
     });
 
 export default vinylBoxRecords;

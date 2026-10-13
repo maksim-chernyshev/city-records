@@ -1,8 +1,8 @@
-import playRecords from './play/index.mts';
-import kulturaRecords from './kultura/index.mts';
-import ritmRecords from './ritm/index.mts';
-import vinylBoxRecords from './vinylbox/index.mts';
-import type {IRecordStore} from "../interfaces/types.mts";
+import playRecords from "./play/index.ts";
+import kulturaRecords from "./kultura/index.ts";
+import ritmRecords from "./ritm/index.ts";
+import vinylBoxRecords from "./vinylbox/index.ts";
+import type { IRecordStore } from "../interfaces/types.ts";
 
 const getRecords = async (text: string) => {
     try {
@@ -11,7 +11,7 @@ const getRecords = async (text: string) => {
             playRecords(text),
             ritmRecords(text),
             vinylBoxRecords(text),
-        ])
+        ]);
 
         return result.flat();
     } catch (e) {

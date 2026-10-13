@@ -1,8 +1,8 @@
 export const RecordStores = {
-    Kultura: 'Kultura',
-    Play: 'Play',
-    Ritm: 'Ritm',
-    Vinylbox: 'Vinylbox',
+    Kultura: "Kultura",
+    Play: "Play",
+    Ritm: "Ritm",
+    Vinylbox: "Vinylbox",
 } as const;
 
 export interface IDisplayedProduct {
@@ -14,10 +14,10 @@ export interface IDisplayedProduct {
 }
 
 export interface IRecordStore {
-    store: keyof typeof RecordStores
-    products: IDisplayedProduct[]
+    store: keyof typeof RecordStores;
+    products: IDisplayedProduct[];
 }
 
-export interface IDisplayedRecordStore extends Pick<IRecordStore, 'store'>{
+export interface IDisplayedRecordStore extends Pick<IRecordStore, "store"> {
     content: string;
 }
