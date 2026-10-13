@@ -6,6 +6,7 @@ import {
 } from "../../interfaces/types.ts";
 
 const STORE_NAME = RecordStores.Play;
+const STORE_SEARCH_URL = process.env.PLAY_REQUEST_URL;
 
 const MAX_PRODUCTS_ON_PAGE = 10;
 const EXCLUDED_PRODUCTS = "Значок";
@@ -13,7 +14,7 @@ const EXCLUDED_PRODUCTS = "Значок";
 const getPlayStoreQuery = (text: string, page: number = 1) => {
     const encodedText = encodeURI(text);
 
-    return `https://search.tildacdn.com/search/?p=1067415&q=${encodedText}&page=${page}&hs=50&st=all`;
+    return `${STORE_SEARCH_URL}${encodedText}&page=${page}`;
 };
 
 const playRecords = async (text: string): Promise<IRecordStore> => {

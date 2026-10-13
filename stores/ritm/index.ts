@@ -7,13 +7,14 @@ import {
 import type { IRitmProductRaw } from "./types.ts";
 
 const STORE_NAME = RecordStores.Ritm;
+const STORE_SEARCH_URL = process.env.RITM_REQUEST_URL;
 
 const HOST = "https://ritm.store";
 
 const getRitmStoreQuery = (text: string) => {
     const encodedText = encodeURI(text);
 
-    return `https://ritm.store/ajax/search.php?value=${encodedText}`;
+    return `${STORE_SEARCH_URL}${encodedText}`;
 };
 
 const ritmRecords = async (text: string): Promise<IRecordStore> => {

@@ -7,13 +7,14 @@ import {
 import * as cheerio from "cheerio";
 
 const STORE_NAME = RecordStores.Vinylbox;
+const STORE_SEARCH_URL = process.env.VINYLBOX_REQUEST_URL;
 
 const HOST = "https://vinylbox.ru";
 
 const getVinylBoxStoreQuery = (text: string) => {
     const encodedText = text.replaceAll(" ", "+");
 
-    return `https://vinylbox.ru/new-products/search/result?setsearchdata=1&category_id=0&add_desc_in_search=1&search=${encodedText}`;
+    return `${STORE_SEARCH_URL}${encodedText}`;
 };
 
 const vinylBoxRecords = (text: string): Promise<IRecordStore> =>
