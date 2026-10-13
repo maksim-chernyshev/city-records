@@ -1,8 +1,8 @@
 import https from 'https';
-import type { IDisplayedProduct } from '../../interfaces/types.mts';
+import {type IDisplayedProduct, type IRecordStore, RecordStores} from '../../interfaces/types.mts';
 import * as cheerio from 'cheerio';
 
-const STORE_NAME = 'Vinyl Box';
+const STORE_NAME = RecordStores.Vinylbox;
 
 const HOST = 'https://vinylbox.ru';
 
@@ -12,8 +12,8 @@ const getVinylBoxStoreQuery = (text: string) => {
     return `https://vinylbox.ru/new-products/search/result?setsearchdata=1&category_id=0&add_desc_in_search=1&search=${encodedText}`;
 };
 
-const vinylBoxRecords = (text: string) =>
-    new Promise<IDisplayedProduct[]>((resolve, reject) => {
+const vinylBoxRecords = (text: string):Promise<IRecordStore> =>
+    new Promise((resolve, reject) => {
         https
             .get(getVinylBoxStoreQuery(text), (res) => {
                 let body = '';
@@ -57,7 +57,6 @@ const vinylBoxRecords = (text: string) =>
                             const trimmedImg = product.image?.trim();
 
                             return {
-                                store: STORE_NAME,
                                 title: `${trimmedTitle} - ${trimmedDesc}` || '',
                                 price: trimmedPrice || '',
                                 link: trimmedLink || '',
@@ -66,7 +65,10 @@ const vinylBoxRecords = (text: string) =>
                         },
                     );
 
-                    resolve(items);
+                    resolve({
+                        store: STORE_NAME,
+                        products: items,
+                    });
                 });
             })
             .on('error', reject);

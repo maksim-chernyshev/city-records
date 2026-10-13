@@ -1,7 +1,8 @@
-import { Bot } from 'node-telegram-bot-api';
+import {Bot} from 'node-telegram-bot-api';
 import 'dotenv/config';
 import getRecords from './stores/index.mts';
-import type { IDisplayedProduct } from './interfaces/types.mts';
+import type {IRecordStore} from './interfaces/types.mts';
+import {formatStoresResult} from "./helpers/formatStoresResult.mts";
 
 const botToken = process.env.TELEGRAM_BOT_TOKEN || '';
 
@@ -19,20 +20,23 @@ async function init() {
     );
 
     cityRecordsBot.on('message', async (ctx) => {
-        const result: IDisplayedProduct[] | undefined = await getRecords(
+        const storesResponse: IRecordStore[] | undefined = await getRecords(
             ctx.update.message?.text || '',
         );
 
-        if (!result || !result?.length) {
+        if (!storesResponse || !storesResponse?.length) {
             return ctx.reply(
                 `К сожалению ничего не найдено :(`,
             );
-
         }
 
-        result.map((item) => {
+        const formattedStoresResult = formatStoresResult(storesResponse);
+
+        formattedStoresResult.map((item) => {
+            if (!item?.content) return;
+
             return ctx.reply(
-                `Название: ${item.title}\nЦена: ${item.price}\nМагазин: ${item.store}\nСсылка: ${item.link}`,
+                `*${item?.store}*\n\n${item?.content}`
             );
         });
     });
