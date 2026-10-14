@@ -30,13 +30,17 @@ async function init() {
 
         const formattedStoresResult = formatStoresResult(storesResponse);
 
-        formattedStoresResult.forEach((item) => {
-            if (!item?.content) return;
+        await Promise.all(
+            formattedStoresResult
+                .filter((item) => item?.content)
+                .map((item) =>
+                    ctx.reply(`*${item.store}*\n\n${item.content}`, {
+                        link_preview_options: { is_disabled: true },
+                    }),
+                ),
+        );
 
-            return ctx.reply(`*${item?.store}*\n\n${item?.content}`, {
-                link_preview_options: { is_disabled: true },
-            });
-        });
+        await ctx.reply("Внимание! Наличие лучше уточнить на сайте магазина!");
     });
 
     await cityRecordsBot.startPolling();

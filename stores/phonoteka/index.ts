@@ -14,8 +14,6 @@ const HOST = "https://plastinka.com";
 const getPhonotekaStoreQuery = (text: string) => {
     const encodedText = encodeURI(text);
 
-    console.log(`${STORE_SEARCH_URL}${encodedText}`);
-
     return `${STORE_SEARCH_URL}${encodedText}`;
 };
 
@@ -30,8 +28,6 @@ const phonotekaRecords = (text: string): Promise<IRecordStore> =>
                 });
 
                 res.on("end", () => {
-                    // console.log(body);
-
                     const $ = cheerio.load(body);
 
                     const data = $.extract({
