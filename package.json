@@ -4,7 +4,7 @@
     "main": "index.ts",
     "scripts": {
         "start": "node index.ts",
-        "dev": "nodemon --watch src --ext ts,tsx --exec tsx index.ts"
+        "dev": "nodemon --watch . --ext ts --exec tsx index.ts"
     },
     "repository": {
         "type": "git",
