@@ -19,18 +19,25 @@ const kulturaRecords = async (text: string): Promise<IRecordStore> => {
     const data = await getJson(getKulturaStoreQuery(text));
     const products: IKulturaProduct[] = data.products;
 
-    const items = products.map((product): IDisplayedProduct => {
+    const items = products.reduce((acc, curr): IDisplayedProduct[] => {
         const roundedPrice =
-            product.price && Math.floor(Number(product.price)).toString();
+            curr.price && Math.floor(Number(curr.price)).toString();
 
-        return {
-            title: product.title || "",
-            price: roundedPrice || "",
-            quantity: product.quantity || "",
-            link: product.url || "",
-            image: JSON.parse(product.gallery)[0].img || "",
-        };
-    });
+        if (!curr.title?.toLowerCase().includes(text.toLowerCase())) {
+            return acc;
+        }
+
+        return [
+            ...acc,
+            {
+                title: curr.title || "",
+                price: roundedPrice || "",
+                quantity: curr.quantity || "",
+                link: curr.url || "",
+                image: JSON.parse(curr.gallery)[0].img || "",
+            },
+        ];
+    }, []);
 
     return {
         store: STORE_NAME,

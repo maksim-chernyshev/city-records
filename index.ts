@@ -30,10 +30,12 @@ async function init() {
 
         const formattedStoresResult = formatStoresResult(storesResponse);
 
-        formattedStoresResult.map((item) => {
+        formattedStoresResult.forEach((item) => {
             if (!item?.content) return;
 
-            return ctx.reply(`*${item?.store}*\n\n${item?.content}`);
+            return ctx.reply(`*${item?.store}*\n\n${item?.content}`, {
+                link_preview_options: { is_disabled: true },
+            });
         });
     });
 

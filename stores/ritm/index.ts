@@ -20,22 +20,27 @@ const getRitmStoreQuery = (text: string) => {
 const ritmRecords = async (text: string): Promise<IRecordStore> => {
     const data = await getJson(getRitmStoreQuery(text));
 
-    const products = data.PRODUCTS;
+    const products: IRitmProductRaw[] = data.PRODUCTS;
 
-    const items = products.map(
-        (product: IRitmProductRaw): IDisplayedProduct => {
-            const price = product.FORMATED_PRICE.replace(/&nbsp;/g, "")
-                .replace(/&#8381;/g, "")
-                .replace(/\D/g, "");
+    const items = products.reduce((acc, curr): IDisplayedProduct[] => {
+        const price = curr.FORMATED_PRICE.replace(/&nbsp;/g, "")
+            .replace(/&#8381;/g, "")
+            .replace(/\D/g, "");
 
-            return {
-                title: product.NAME || "",
+        if (!curr.NAME.toLowerCase().includes(text.toLowerCase())) {
+            return acc;
+        }
+
+        return [
+            ...acc,
+            {
+                title: curr.NAME || "",
                 price: price || "",
-                link: `${HOST}${product.DETAIL_PAGE_URL}` || "",
-                image: `${HOST}${product.MORE_PHOTO}` || "",
-            };
-        },
-    );
+                link: `${HOST}${curr.DETAIL_PAGE_URL}` || "",
+                image: `${HOST}${curr.MORE_PHOTO}` || "",
+            },
+        ];
+    }, []);
 
     return {
         store: STORE_NAME,

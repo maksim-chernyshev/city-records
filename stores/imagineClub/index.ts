@@ -49,24 +49,40 @@ const imagineClubRecords = (text: string): Promise<IRecordStore> =>
                         ],
                     });
 
-                    const items = data.products.map(
-                        (product): IDisplayedProduct => {
-                            const trimmedArtist = product.artist?.trim();
-                            const trimmedTitle = product.title?.trim();
-                            const trimmedPrice = product.price
+                    const items = data.products.reduce(
+                        (acc, curr): IDisplayedProduct[] => {
+                            const trimmedArtist = curr.artist?.trim();
+                            const trimmedTitle = curr.title?.trim();
+                            const trimmedPrice = curr.price
                                 ?.trim()
                                 .replace(/\D/g, "");
-                            const trimmedLink = `${HOST}${product.link?.trim()}`;
-                            const trimmedImg = product.image?.trim();
+                            const trimmedLink = `${HOST}${curr.link?.trim()}`;
+                            const trimmedImg = curr.image?.trim();
 
-                            return {
-                                title:
-                                    `${trimmedArtist} - ${trimmedTitle}` || "",
-                                price: trimmedPrice || "",
-                                link: trimmedLink || "",
-                                image: trimmedImg || "",
-                            };
+                            if (
+                                !trimmedArtist
+                                    ?.toLocaleLowerCase()
+                                    .includes(text.toLowerCase()) &&
+                                !trimmedTitle
+                                    ?.toLocaleLowerCase()
+                                    .includes(text.toLowerCase())
+                            ) {
+                                return acc;
+                            }
+
+                            return [
+                                ...acc,
+                                {
+                                    title:
+                                        `${trimmedArtist} - ${trimmedTitle}` ||
+                                        "",
+                                    price: trimmedPrice || "",
+                                    link: trimmedLink || "",
+                                    image: trimmedImg || "",
+                                },
+                            ];
                         },
+                        [],
                     );
 
                     resolve({

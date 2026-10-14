@@ -51,23 +51,40 @@ const vinylBoxRecords = (text: string): Promise<IRecordStore> =>
                         ],
                     });
 
-                    const items = data.products.map(
-                        (product): IDisplayedProduct => {
-                            const trimmedTitle = product.title?.trim();
-                            const trimmedDesc = product.description?.trim();
-                            const trimmedPrice = product.price
+                    const items = data.products.reduce(
+                        (acc, curr): IDisplayedProduct[] => {
+                            const trimmedTitle = curr.title?.trim();
+                            const trimmedDesc = curr.description?.trim();
+                            const trimmedPrice = curr.price
                                 ?.trim()
                                 .replace(/\D/g, "");
-                            const trimmedLink = `${HOST}${product.link?.trim()}`;
-                            const trimmedImg = product.image?.trim();
+                            const trimmedLink = `${HOST}${curr.link?.trim()}`;
+                            const trimmedImg = curr.image?.trim();
 
-                            return {
-                                title: `${trimmedTitle} - ${trimmedDesc}` || "",
-                                price: trimmedPrice || "",
-                                link: trimmedLink || "",
-                                image: trimmedImg || "",
-                            };
+                            if (
+                                !trimmedTitle
+                                    ?.toLocaleLowerCase()
+                                    .includes(text.toLowerCase()) &&
+                                !trimmedDesc
+                                    ?.toLocaleLowerCase()
+                                    .includes(text.toLowerCase())
+                            ) {
+                                return acc;
+                            }
+
+                            return [
+                                ...acc,
+                                {
+                                    title:
+                                        `${trimmedTitle} - ${trimmedDesc}` ||
+                                        "",
+                                    price: trimmedPrice || "",
+                                    link: trimmedLink || "",
+                                    image: trimmedImg || "",
+                                },
+                            ];
                         },
+                        [],
                     );
 
                     resolve({

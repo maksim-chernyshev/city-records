@@ -10,7 +10,7 @@ export function formatStoresResult(
         let content = "";
 
         for (const product of item.products) {
-            content += `Название: ${product.title}\nЦена: ${product.price} р.\nСсылка: ${product.link}\n\n`;
+            content += `${product.title}\n${product.price} р.\n${product.link}\n\n`;
         }
 
         return {

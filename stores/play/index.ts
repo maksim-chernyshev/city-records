@@ -36,20 +36,27 @@ const playRecords = async (text: string): Promise<IRecordStore> => {
         ...otherPages.flatMap((page) => page.pages),
     ];
 
-    const items = products.map((product): IDisplayedProduct => {
+    const items = products.reduce((acc, curr): IDisplayedProduct[] => {
         const roundedPrice =
-            product.product.price &&
-            Math.floor(Number(product.product.price)).toString();
+            curr.product.price &&
+            Math.floor(Number(curr.product.price)).toString();
 
-        return {
-            title: product.product.title || "",
-            price: roundedPrice || "",
-            link: product.pageurl || "",
-            image: product.product.img || "",
-        };
-    });
+        if (!curr.product.title.toLowerCase().includes(text.toLowerCase())) {
+            return acc;
+        }
 
-    const filteredItems = items.filter((item) => {
+        return [
+            ...acc,
+            {
+                title: curr.product.title || "",
+                price: roundedPrice || "",
+                link: curr.pageurl || "",
+                image: curr.product.img || "",
+            },
+        ];
+    }, []);
+
+    const filteredItems = items.filter((item: IDisplayedProduct) => {
         return !item.title.includes(EXCLUDED_PRODUCTS);
     });
 
