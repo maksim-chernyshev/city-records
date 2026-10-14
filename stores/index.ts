@@ -1,9 +1,10 @@
+import type { IRecordStore } from "../interfaces/types.ts";
 import playRecords from "./play/index.ts";
 import kulturaRecords from "./kultura/index.ts";
 import ritmRecords from "./ritm/index.ts";
 import vinylBoxRecords from "./vinylbox/index.ts";
-import type { IRecordStore } from "../interfaces/types.ts";
 import imagineClubRecords from "./imagineClub/index.ts";
+import phonotekaRecords from "./phonoteka/index.ts";
 
 const getRecords = async (text: string) => {
     try {
@@ -13,6 +14,7 @@ const getRecords = async (text: string) => {
             ritmRecords(text),
             vinylBoxRecords(text),
             imagineClubRecords(text),
+            phonotekaRecords(text),
         ]);
 
         return result.flat();

@@ -4,6 +4,7 @@ export const RecordStores = {
     Ritm: "Ritm",
     Vinylbox: "Vinylbox",
     ImagineClub: "Imagine Club",
+    Phonoteka: "Фонотека",
 } as const;
 
 export type RecordStore = (typeof RecordStores)[keyof typeof RecordStores];
