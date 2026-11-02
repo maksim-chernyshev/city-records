@@ -59,7 +59,10 @@ async function init() {
                 for (const [i, pack] of packs.entries()) {
                     await ctx.reply(
                         `*${result.store}* Часть ${i + 1}\n\n${pack.join("\n\n")}`,
-                        { link_preview_options: { is_disabled: true } },
+                        {
+                            parse_mode: "MarkdownV2",
+                            link_preview_options: { is_disabled: true },
+                        },
                     );
                 }
 
@@ -67,6 +70,7 @@ async function init() {
             }
 
             await ctx.reply(`*${result.store}*\n\n${result.content}`, {
+                parse_mode: "MarkdownV2",
                 link_preview_options: { is_disabled: true },
             });
         }

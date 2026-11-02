@@ -3,6 +3,16 @@ import type {
     IRecordStore,
 } from "../interfaces/types.ts";
 
+const escapeMarkdownV2 = (value: string) =>
+    value.replace(/([_\*\[\]()~`>#+\-=|{}.!\\])/g, "\\$1");
+
+const formatProductTitle = (title: string, link?: string) => {
+    if (!link) return escapeMarkdownV2(title);
+
+    const safeLink = link.replace(/([\\()])/g, "\\$1");
+    return `[${escapeMarkdownV2(title)}](${safeLink})`;
+};
+
 export function formatStoresResult(
     items: IRecordStore[],
 ): IDisplayedRecordStore[] {
@@ -10,7 +20,7 @@ export function formatStoresResult(
         let content = "";
 
         for (const product of item.products) {
-            content += `${product.title}\n${product.price} р.\n${product.link}\n\n`;
+            content += `${formatProductTitle(product.title, product.link)}\n${escapeMarkdownV2(product.price)} р\\.\n\n`;
         }
 
         return {
