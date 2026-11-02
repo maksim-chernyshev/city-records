@@ -25,9 +25,7 @@ async function init() {
 
     cityRecordsBot.on("message", async (ctx) => {
         const storesResponse: IRecordStore[] | undefined = await getRecords(
-            // TODO fix types
-            //@ts-ignore
-            ctx.update.message?.text || "",
+            ctx.message?.text || "",
         );
 
         if (!storesResponse || !storesResponse?.length) {
@@ -42,7 +40,7 @@ async function init() {
         for (let result of notEmptyResult) {
             if (result.content.length > MAX_REPLY_LENGTH) {
                 const parts = result.content.split("\n\n");
-                let packs = [];
+                let packs: string[][] = [];
 
                 const messages = Math.ceil(
                     parts.length / MAX_ITEMS_IN_LONG_REPLY,
@@ -58,7 +56,7 @@ async function init() {
 
                 for (const [i, pack] of packs.entries()) {
                     await ctx.reply(
-                        `*${result.store}* Часть ${i + 1}\n\n${pack.join("\n\n")}`,
+                        `*${result.store}* (Часть ${i + 1})\n\n${pack.join("\n\n")}`,
                         {
                             parse_mode: "MarkdownV2",
                             link_preview_options: { is_disabled: true },
