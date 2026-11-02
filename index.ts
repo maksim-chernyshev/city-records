@@ -1,10 +1,11 @@
 import { Bot } from "node-telegram-bot-api";
 import "dotenv/config";
-import getRecords from "./stores/index.ts";
-import type { IRecordStore } from "./interfaces/types.ts";
-import { formatStoresResult } from "./helpers/formatStoresResult.ts";
+import getRecords from "./src/data/index.ts";
+import type { IRecordStore } from "./src/interfaces/types.ts";
+import { formatStoresResult } from "./src/helpers/formatStoresResult.ts";
 
 const botToken = process.env.TELEGRAM_BOT_TOKEN || "";
+const maxReplyLength = 4096;
 
 async function init() {
     if (!botToken) {
@@ -33,11 +34,13 @@ async function init() {
         await Promise.all(
             formattedStoresResult
                 .filter((item) => item?.content)
-                .map((item) =>
+                .map((item) => {
+                    console.log(item.content.length);
+
                     ctx.reply(`*${item.store}*\n\n${item.content}`, {
                         link_preview_options: { is_disabled: true },
-                    }),
-                ),
+                    });
+                }),
         );
 
         await ctx.reply("Внимание! Наличие лучше уточнить на сайте магазина!");

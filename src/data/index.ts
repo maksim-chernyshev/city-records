@@ -8,16 +8,19 @@ import phonotekaRecords from "./phonoteka/index.ts";
 
 const getRecords = async (text: string) => {
     try {
-        const result: IRecordStore[] = await Promise.all([
-            kulturaRecords(text),
-            playRecords(text),
-            ritmRecords(text),
-            vinylBoxRecords(text),
-            imagineClubRecords(text),
-            phonotekaRecords(text),
-        ]);
+        const response: PromiseSettledResult<IRecordStore>[] =
+            await Promise.allSettled([
+                kulturaRecords(text),
+                playRecords(text),
+                ritmRecords(text),
+                vinylBoxRecords(text),
+                imagineClubRecords(text),
+                phonotekaRecords(text),
+            ]);
 
-        return result.flat();
+        return response
+            .filter((store) => store.status !== "rejected")
+            .map((item) => item.value);
     } catch (e) {
         console.error(e);
     }
