@@ -25,6 +25,8 @@ async function init() {
 
     cityRecordsBot.on("message", async (ctx) => {
         const storesResponse: IRecordStore[] | undefined = await getRecords(
+            // TODO fix types
+            //@ts-ignore
             ctx.update.message?.text || "",
         );
 
